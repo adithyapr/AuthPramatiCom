@@ -1,0 +1,322 @@
+<html>
+	<head>
+		<title> Help Guide </title>
+		<link type='text/css' rel='stylesheet' href='/css/styles.css'>	
+		<style>
+			h3 {
+				margin: 5px;
+				padding-left: 10px;
+			}
+			p {
+				margin: 5px 0px;
+			}
+			.navigation {
+				text-align: left;
+				padding-left: 75px;
+			}
+			.content {
+				text-align: left;
+				padding-left: 75px;
+				padding-right:25px;
+			}
+			.code {
+			    background-color: #DFF4FF;
+			    border: 1px solid #C2E1EF;
+			    border-radius: 10px 10px 10px 10px;
+			    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+			    color: #336699;
+			    display: block;
+			    margin: 10px;
+			    overflow: visible;
+			    padding: 0;
+			    text-align: left;
+			}
+			.item1 {
+				padding-left: 25px;
+			}
+			.subpoint {
+				font-style:italic;
+			}
+		</style>
+	</head>
+	<body>
+		<div id='page'>
+			<div class='message'> Help Guide </div>
+			<div class='navigation'>
+				<ol>
+					<li> <a href="#Introduction">Introduction</a> </li>
+					<li> 
+						<a href="#Installation">Installation</a> 
+						<ol>
+							<li> <a href="#Download">Download</a> </li>
+							<li> <a href="#Configuration">Configuration changes</a> </li>
+							<li> <a href="#AppSettings">App settings</a> </li>
+							<li> <a href="#ConfigSettings">Config.ini settings</a> </li>
+						</ol>
+					</li>
+					<li>
+						<a href="#CodeStructure">Code Structure</a> 
+						<ol>
+							<li> <a href="#Interface">Interface/Visual files</a> </li>
+							<li> <a href="#Library">Library files</a> </li>
+							<li> <a href="#Log">Log files</a> </li>
+							<li> <a href="#Config">Config files</a> </li>
+							<li> <a href="#Templates">Email templates</a> </li>
+						</ol>
+					</li>
+				</ol>
+			</div>
+			<div class='content'>
+				<h2> <a name='Introduction'>Introduction</a> </h2>
+				This application is an extension for the existing <a href='http://auth.pramati.com'>lemon ldap portal</a> (http://auth.pramati.com).
+				Accessible at <a href='http://authtool.pramati.com'>"User Management Tool"</a> http://authtool.pramati.com. This portal is authentication protected and content in it is displayed according to the access permission levels set.
+
+				<h2><a name='Installation'> Installation </a></h2>
+				<h3><a name='Download'> Download </a></h3>
+				<p>Code can be downloaded from the SVN repository. There are two components here, <strong>User Interactive</strong> and <strong>Library</strong> files</p>
+				<ul>
+					<li><div class='item1'> <b>User Interative</b> component is composed of <span class='subpoint'>perl(pl), javascript(js), stylesheets(css) and images</span> files. And these files are placed in the web root folder (www or htdocs) folder. </div></li>
+					<li><div class='item1'><b>Library(PUserAuthTool)</b> component is composed of <span class='subpoint'> perl module(pm)</span> files. Copy these files to perl library location. Usually on "Ubuntu" its copied to <span class='subpoint'>/usr/local/share/perl/&lt;perl version&gt;/PUserAuthTool/</span> and on "CentOS" its copied to <span class='subpoint'>/usr/lib/perl5/site_perl/&lt;perl version&gt;/PUserAuthTool/</span></div></li>
+				</ul>
+				
+				
+				<h3><a name='Configuration'> Configuration changes </a></h3>
+				<p>Since the authentication is driven from LDAP, this application must be integrated as module with the main application's authentication logic. This can be achieved through numerous ways, but for the current appliction it has been implemented by making it as part of <b> Lemon LDAP's handler configuration.</b></p>
+				<div>Locate for the file "handler-apache2.conf". On, 
+					<div class='item1'> Ubuntu box: <span class='subpoint'>/etc/lemonldap-ng/handler-apache2.conf</span></div>
+					<div class='item1'> CentOS box: <span class='subpoint'>/usr/local/lemonldap-ng/etc/handler-apache2.conf</span></div>
+				</div>
+				<div class='code'>
+					<div  class='content'>
+						ServerName authtool.pramati.com #Replace ServerName with something of your preference <br><br>
+						DocumentRoot /var/www/&lt;app name&gt;/ #Replace with path where User Interactives files have been copied <br>
+		    				&lt;Directory /var/www/&lt;app name&gt;/&gt; #Same as above <br>
+					</div>
+				</div>					
+				
+				<h3><a name='AppSettings'> App settings </a></h3>
+				<ul>
+					<li><div class='item1'> <b>Audit Log file</b> Captures the log activity of the application. Usually placed in "log" folder (/var/log/&lt;app name&gt;/audit.log)</div></li>
+					<li><div class='item1'> <b>Config file</b> The whole application's configuration settings are defined in this file. The path to where this file has been placed must be defined in the library file <strong> PConfig.pm </strong>.</div></li>
+				</ul>
+				<div class='code'>
+					<div  class='content'>
+						my $cfg = new Config::IniFiles( -file => "/var/www/&lt;app name&gt;/config.ini" );
+					</div>
+				</div>	
+
+				<h3><a name='ConfigSettings'> Config.ini settings </a></h3>
+				Most of the settings are self explainatory.<br>
+				Notification emails are sent to the setting <strong>'ITNotification'</strong> and can be turned On/Off by setting <strong>1/0</strong> for settings <strong>(EnableAddNotification/EnableRemoveNotification/EnableResetNotification)</strong>
+				<div class='code'>
+					<pre>
+Contact IT team for getting authentication details of LDAP and Mail settings.
+
+[LDAP]
+Host=
+DN=cn=admin,dc=pramati,dc=com
+BaseDn=ou=Employees,dc=pramati,dc=com
+GroupDn=ou=groups,dc=pramati,dc=com
+Pwd=
+
+[Mail]
+Host=	
+User=
+Pwd=
+
+[Paths]
+File=			# Location of Audit log file
+AppPath=		# Location where interative file are copied, usually web root
+
+[Links]
+Logout=http://auth.example.com/index.pl?logout=1
+Main=http://auth.example.com/		# On LIVE site it would be auth.pramati.com
+
+[Notification]
+From=netadmin@pramati.com				
+ITNotification=ithelp@imaginea.com				
+HRNotification=hr@pramati.com
+HRName=Erin			# Name of the HR sent to new joinee's Welcome Email
+EnableAddNotification=1			 
+EnableRemoveNotification=1
+EnableResetNotification=1
+SubjectAddUserFailed=Error while adding user to LDAP
+SubjectRemoveUserFailed=Error while deleting user from LDAP
+SubjectResetUserFailed=Error while resetting password
+SubjectWelcome=A Very Warm Welcome To Pramati!
+SubjectAddUser=New User added to LDAP
+SubjectRemoveUser=User deleted from LDAP
+SubjectResetUser=Password Reset invoked
+
+[AdminAccess]
+addTabGroups=sysadmin,hr		#Defines which users can view Add User form
+deleteTabGroups=sysadmin,hr		#Defines which users can view Delete user form
+
+[Messages]
+AddUserSuccess=User account created successfully
+AddUserFailed=User account creation failed!
+					</pre>
+				</div>
+
+				<h2><a name='CodeStructure'> Code Structure </a></h2>
+				<h3><a name='Interface'> Interface/Visual files </a></h3>
+					<b>adduser.pl</b>
+					<ul>
+						<li>Serves interface to "Add User" functional form field items. </li>
+						<li>Live check on ldap for the availability of "Email" and "UserID" field (Uniqueness)</li>
+						<li>Javascript validations defined for each and every field</li>
+						<li>Jquery UI Calendar implementation for date fields (http://jqueryui.com/demos/datepicker/)</li>							
+					</ul>
+					<b>deleteuser.pl</b>
+					<ul>
+						<li>Serves interface to handle “Delete” and “Password Reset” functional form field items.</li>
+						<li>Ability to handle multiple deletion and/or reset functionality.</li>
+					</ul>
+					<b>ajax_handler.pl</b>
+					<ul>
+						<li>Handles all AJAX related calls for this application.</li>
+					<li>UserId and Email uniqueness</li>
+					<li>Creating user</li>
+					<li>Deleting users</li>
+					<li>Reseting password of users</li>
+					</ul>
+					<b>css/style.css</b>
+					<ul>
+						<li>All the styles for this application are defined here.</li>
+						<li>Most of the styles have been retained from the original application (with pastel as the skin preference)</li>
+					</ul>	
+					<b>css/images</b>
+					<ul>
+						<li>All the images required for the application are placed here</li>
+					</ul>
+					<b>js/script.js</b>
+					<ul>
+						<li>Handles all add user form validation functionality, calendar initialization, and form submission to subsequent page.</li>
+					</ul>
+					<b>js/script_create.js</b>
+					<ul>
+						<li>Fires ajax request to submit the finalized add user form.</li>
+					</ul>
+					<b>js/script_delete.js</b>
+					<ul>
+						<li>Handles both delete and reset password ajax request and subsequent display of the response.</li>
+					</ul>
+				<h3><a name='Library'> Library files </a></h3>
+				<p>Package named “PuserAuthTool” handles all core functional aspects of the application.</p>
+<b>LDAP.pm</b>
+<pre>
+	Packages used
+		- Net::LDAP
+	
+	init()
+		Initialization the ldap connection using the settings given in config.ini
+	
+	authenticate()
+		Checks whether the logged user has permission to view the page.
+
+	search()
+		Searches LDAP based on criteria like "UserID, Email, Name"
+
+	create()
+		Add user to LDAP
+
+	remove()
+		Doesn't physically delete the record but rather deactivates the record.
+	
+	resetPwd()
+		Reset password for a given selected user.
+
+	getBUs()
+		Currently hardcoded hash array, but need to be automated to pull the data from LDAP server.
+</pre>
+<b>PEmail.pm</b>
+<pre>
+	Packages used
+		- MIME::Lite
+		- HTML::Template
+
+	sendEmail()
+		- Fires email to the given address using SMTP authentication.
+		- Ability to add inline images along with email
+
+	Notications 
+		A notification email is sent to IT team whenever there is
+		- User Added (AddUserNotification)
+		- User Deleted (RemoveUserNotification)
+		- Password reset (ResetUserNotification)
+		- Error while implementing the above functionality 
+		  (AddUserFailedNotification, RemoveUserFailedNotification, ResetUserFailedNotification)
+		- Welcome email will be sent to new joinee's personal email (welcomeNotification). 
+		  The template of the email is pulled form the file 'welcome.tmpl' placed under templates folder.
+</pre>
+</pre>
+<b>PLog.pm</b>
+<pre>
+	Packages used
+		- POSIX qw/strftime/
+
+	plog()
+		Logs all user activities be user addition, deletion and password reset functionality.
+		Log format [UTC date format] [IP@UserID] User action
+</pre>
+<b>PTemplate.pm</b>
+<pre>
+	Packages used
+		- None
+
+	menuTemplate()
+		Constructs menu navigation tabs "Add User", "DeleteReset", "Main Portal", "Logout"
+
+	addUserTemplate()
+		Constructs the initial "Add User" form.
+
+	addUserConfirmTemplate()
+		This is mainly a confirmation form. The data displayed here would be directly consumed 
+		by the LDAP service and is designed as per the fields defined in LDAP.
+
+	searchUserTemplate()
+		Lets the user search LDAP based on criteria like 'UserID', 'Email' or 'Name'.
+
+	noAccessTemplate()
+		Access denied template 
+</pre>
+<b>PConfig.pm</b>
+<pre> 
+	Packages used
+		- Config::IniFiles
+
+	init()
+		- Reads the settings defined in config.ini file and generates the hash array. 
+		- So any setting defined in config.ini should equivalently be defined in this file, 
+		so that it is available in other module files.
+</pre>
+				<h3><a name='Log'> Log files </a></h3>	
+				This file is designed to serve ISO security audit purpose. Basically tracks all user actions (add, delete, and password reset). Path of the log file should be defined in the config file and this log file should have complete read and write access(chmod 666 audit.log).
+				<div class='code'>
+					<div  class='content'>
+						[Paths]<br>
+						File=<br>
+						<br>
+						<b>Sample format</b> <br>
+[Fri Mar 09  16:04:57 2012] [adithyap@127.0.0.1] Reset: Password reset invoked for user with uid 'testuser'<br>
+[Fri Mar 09  16:07:37 2012] [adithyap@127.0.0.1] Create: Created user with uid 'testuser'<br>
+[Fri Mar 09  16:07:59 2012] [adithyap@127.0.0.1] Delete: Deleted user with uid 'testuser'<br>
+					</div>
+				</div>	
+				<h3><a name='Config'> Config files </a></h3>
+				All the application's configurational settings are defined in this file. The path of this file should be declared in <b>PConfig.pm</b> library file.
+				<ul>
+					<li>LDAP settings</li>
+					<li>SMTP Mail settings</li>
+					<li>Paths (Log file, App web path)</li>
+					<li>Links (Used by navigation tabs "Main Portal" and "Logout")</li>
+					<li>Notifications (To & From email addresses, Enabling/Disabling notifications, and Subjects of these notifications)</li>
+					<li>AdminAccess (Defines which user based can view this app's content)</li>
+					<li>Messages (Ajax response message when add user operation is successful/failed)</li>
+				</ul>
+				<h3><a name='Templates'> Email templates </a></h3>
+				Designed with an idea to separate templates which demands higher design requirements. Currently this templating functionality is implemented for only "Welcome Email" template (placed under templates/welcome.tmpl). HTML::Template perl module templating engine has been used to implement this functionality. 			 
+			</div>
+		</div>
+	<body>
+</html>

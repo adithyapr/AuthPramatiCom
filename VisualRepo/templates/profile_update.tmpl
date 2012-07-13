@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>Alert - Profile Update</title>
+</head>
+<body>
+Dear <TMPL_VAR NAME=USER>,<br>
+<p>Your profile has been successfully updated.</p>
+<table border='1'>
+	<thead>
+		<tr>
+			<th>&nbsp;</th>
+			<th>Previous</th>
+			<th>New</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Date of Birth</td>
+			<td><TMPL_VAR NAME=PDOB></td>
+			<td><TMPL_VAR NAME=NDOB></td>
+		</tr>
+		<tr>
+			<td>Personal Email</td>
+			<td><TMPL_VAR NAME=PEMAIL></td>
+			<td><TMPL_VAR NAME=NEMAIL></td>
+		</tr>
+		<tr>
+			<td>Mobile</td>
+			<td><TMPL_VAR NAME=PMOB></td>
+			<td><TMPL_VAR NAME=NMOB></td>
+		</tr>
+		<tr>
+			<td>Temporary Address</td>
+			<td><TMPL_VAR NAME=PTMPADDR></td>
+			<td><TMPL_VAR NAME=NTMPADDR></td>
+		</tr>
+		<tr>
+			<td>Permanent Address</td>
+			<td><TMPL_VAR NAME=PPERADDR></td>
+			<td><TMPL_VAR NAME=NPERADDR></td>
+		</tr>
+		<tr>
+			<td>Job Title</td>
+			<td><TMPL_VAR NAME=PDES></td>
+			<td><TMPL_VAR NAME=NDES></td>
+		</tr>
+		<tr>
+			<td>Department</td>
+			<td><TMPL_VAR NAME=PDEP></td>
+			<td><TMPL_VAR NAME=NDEP></td>
+		</tr>
+		<tr>
+			<td>Location</td>
+			<td><TMPL_VAR NAME=PLOC></td>
+			<td><TMPL_VAR NAME=NLOC></td>
+		</tr>
+	</tbody>
+</table>
+<br>
+- UserManagementTool
+</body>
+</html>			
